@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class GoalController : MonoBehaviour
+public class NorthGoalController : MonoBehaviour
 {
     public TMP_Text score1;
     public int score_count = 0;

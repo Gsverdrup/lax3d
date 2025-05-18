@@ -28,4 +28,10 @@ public class BallController : MonoBehaviour
             ballRb.angularVelocity = Vector3.zero;
         }
     }
+
+    void OnCollisionEnter(Collision collision) {
+    if (collision.gameObject.CompareTag("Goalie")) {
+        ballRb.linearVelocity *= 0.4f; // Reduce speed after hit
+    }
+}
 }
