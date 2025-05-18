@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     public GameObject ball;
     private BallController ballController;
     private Rigidbody ballRb;
-    public Vector3 ballOffset = new Vector3(1f, 0.75f, 0f);
 
     public float shootForce = 20f;
     
@@ -33,9 +32,11 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
-        if (hasBall && ball != null) {
-            ball.transform.position = transform.position + transform.TransformDirection(ballOffset);
-            if (ballRb != null) {
+        if (hasBall && ball != null)
+        {
+            ball.transform.position = transform.position;
+            if (ballRb != null)
+            {
                 ballRb.isKinematic = true;
             }
         } 
@@ -45,10 +46,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("Ball") /*&& !(other.inPossesion)*/) {
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("Ball")) {
             hasBall = true;
-            // ball.SetActive(false);
             ballController.inPossesion = true;
         }
     }
@@ -61,24 +61,21 @@ public class PlayerController : MonoBehaviour
     }
 
     private void ShootBall() {
-        hasBall = false;
-        ballRb.isKinematic = false;
-        ballController.inPossesion = false;
-        
-        //ball.transform.position = transform.position + transform.forward * 1.5f + Vector3.up * 0.5f;
-        //ball.SetActive(true);
-        ballRb.linearVelocity = Vector3.zero;
-        ballRb.angularVelocity = Vector3.zero;
-
-        //Vector3 shotForce = transform.forward * 30f + Vector3.up * 2f;
-        //ballRb.AddForce(shotForce, ForceMode.Impulse);
-
         // Get the mouse click direction from the camera
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit)) {
+            hasBall = false;
+            ballRb.isKinematic = false;
+            ballController.inPossesion = false;
+
             // Get the direction from the ball to the hit point
             Vector3 direction = (hit.point - ball.transform.position).normalized;
+
+            ball.transform.position = transform.position + direction * 1.5f;
+            ball.SetActive(true);
+            ballRb.linearVelocity = Vector3.zero;
+            ballRb.angularVelocity = Vector3.zero;
 
             // Apply impulse force in that direction
             ballRb.AddForce(direction * shootForce, ForceMode.Impulse);

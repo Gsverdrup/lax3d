@@ -14,8 +14,8 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (inPossesion) {
-            SetActive(false);
-        }*/
+        if (inPossesion) {
+            gameObject.SetActive(false);
+        }
     }
 }
